@@ -1,0 +1,12 @@
+.btn
+{
+    color:white;
+    margin:10px;
+    background-color: #03AEEE;
+    height: 40px;
+    width:300px;
+    border-radius: 10px;
+    border:none;
+    font-size: 25px;
+    font: normal normal 600 16px/22px Nunito;
+}

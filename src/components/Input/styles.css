@@ -1,0 +1,50 @@
+input:focus,
+input:focus-visible,
+input:active {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+input[type='text'],
+input[type='password'] {
+    border: 1px solid #ccc;
+    margin:5px;
+    height:40px;
+    border-radius: 10px;
+    width:300px;
+    padding-left:10px;
+}
+
+input[type='text']:focus,
+input[type='password']:focus {
+    border: 1px solid #ccc;
+}
+
+
+.relative
+{
+    position: relative;
+}
+
+input[type='text']+label,input[type='password']+label
+{
+    position:absolute;
+    top:20px;
+    left:15px;
+    color:#ccc;
+    pointer-events:none;
+    z-index: 1;
+    transition: all 0.5s ease;
+    font-size: 16px;
+}
+
+
+input[type='text']:hover+label,input[type='password']:hover+label
+{
+    top:3px;
+    color:#03AEEE;
+    background: white;
+    padding:0 10px;
+    font-size:10px;
+}
