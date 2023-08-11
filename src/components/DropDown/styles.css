@@ -1,0 +1,26 @@
+.dropdown-container
+{
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.dropdownlabel-style
+{
+    
+    font: normal normal 600 16px/22px Nunito;
+    letter-spacing: 0px;
+    color: #3E3E3E;
+}
+
+.dropdown-select
+{
+    width: 60%;
+    height:40px;
+    background-color: #FFF;
+    border-radius: 10px;
+    font: normal normal 600 14px/19px Nunito;
+    letter-spacing: 0px;
+    color: #8B8D9D;
+    text-align: center;
+}

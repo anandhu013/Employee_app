@@ -39,3 +39,22 @@ opacity: 1;
 {
     margin-left: 20px;
 }
+
+.form-container
+{
+    background-color: #FFF;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-parent
+{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-child
+{
+    width: 30%;
+    margin-top: 20px;
+}
