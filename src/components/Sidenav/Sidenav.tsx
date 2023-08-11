@@ -6,7 +6,7 @@ const Sidenav: React.FC = () => {
     <div className='sidenav'>
       <div className='sidenav_comp'>
         <div className='sidenav_icon'>
-          <img src='assets/icons/employees.svg' />
+          <img src='/assets/icons/employees.svg' />
         </div>
         <p>Employee list</p>
       </div>

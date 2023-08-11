@@ -11,7 +11,7 @@ const SubButton: React.FC<SubButton_prop_types> = (props) => {
   return (
     <div className='sub-btn-container'>
       <div className='img-container'>
-        <button className='sub-btn-style'>
+        <button className='sub-btn-style' onClick={props.onclickfunc}>
           <img src={props.img_path} className='btn-img-style'/>
         </button>
       </div>

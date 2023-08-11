@@ -1,0 +1,41 @@
+.container
+{top: 0px;
+left: 0px;
+width: 1920px;
+height: 1080px;
+
+/* UI Properties */
+
+background: #FAFAFA 0% 0% no-repeat padding-box;
+opacity: 1;
+}
+
+.create-employee-container
+{
+    position: fixed;
+    left: 323px;
+    top: 91px;
+    height: calc(100% - 91px);
+    width: calc(100% - 323px);
+    display: flex;
+    flex-direction: column;
+}
+
+.create-employee-header
+{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100px;
+    background-color: #FFFFFF;
+    text-align: left;
+    font: normal normal bold 24px/32px Nunito Sans;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+}
+
+.create-employee-title
+{
+    margin-left: 20px;
+}

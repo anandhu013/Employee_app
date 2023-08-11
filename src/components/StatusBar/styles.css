@@ -1,0 +1,20 @@
+.status-container
+{
+    border-radius: 15px;
+    width: 111px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font: normal normal normal 16px/22px Nunito Sans;
+}
+
+.Active
+{
+    background: #D3F4BE 0% 0% no-repeat padding-box;
+}
+
+.Inactive
+{
+    background: #FFBFBF 0% 0% no-repeat padding-box;
+}
