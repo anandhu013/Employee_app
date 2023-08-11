@@ -1,0 +1,28 @@
+.header-layout
+{
+top: 0px;
+left: 300px;
+width: 1630px;
+height: 77px;
+background: #FFF 0% 0% no-repeat padding-box;
+opacity: 1;
+}
+
+.header-container{
+    display: flex;
+    justify-content: left;
+    position:fixed;
+}
+
+.logo-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 77px;
+}
+
+.img-style{
+    width: 208.36px;
+    height: 45px;
+}

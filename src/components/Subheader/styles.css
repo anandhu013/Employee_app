@@ -1,0 +1,17 @@
+.sub-container{
+    background-color:#FFF;
+    top: 91px;
+    left:323px;
+    height: 100px;
+    position:fixed;
+    width:1573px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title
+{
+    margin-left: 20px;
+    font: normal normal bold 24px/32px Nunito Sans;
+}

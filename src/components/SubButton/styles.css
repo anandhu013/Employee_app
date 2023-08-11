@@ -1,0 +1,50 @@
+.sub-btn-container
+{
+    display: flex;
+    justify-content: flex-start;
+    background: #EAF9FF 0% 0% no-repeat padding-box;
+    border-radius: 50px;
+    opacity: 1;
+    width: 259px;
+    height: 58px;
+}
+
+.img-container
+{
+    height: 58px;
+    width: 58px;
+    border-radius: 50%;
+    background-color: #03AEEE;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-container
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font: normal normal normal 20px/27px Nunito Sans;
+    margin-left: 10px;
+}
+
+.btn-img-style
+{
+    background-color: #03AEEE;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+
+.sub-btn-style
+{
+    background-color: #03AEEE;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-self:center;
+    border: none;
+}

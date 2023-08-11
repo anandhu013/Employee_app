@@ -1,0 +1,46 @@
+
+
+.sidenav {
+    height: 1003px; 
+    width: 300px; 
+    position: fixed;
+    z-index: 1; 
+    top: 77px; 
+    left: 0;
+    background-color: #fff;
+    overflow-x: hidden;
+    border-right: #ccc;
+  }
+
+  .sidenav_comp
+  {
+    color: #FFF;
+    background-color: #03AEEE;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    margin-left: 10px;
+    height: 40px;
+    display:flex;
+    align-items: center;
+  }
+
+  .sidenav p{
+    margin: 15px;
+    margin-left:5px;
+    font-size: 14px;
+  }
+
+  .sidenav_icon
+  {
+    background-color: #FFF;
+    z-index: 1;
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
