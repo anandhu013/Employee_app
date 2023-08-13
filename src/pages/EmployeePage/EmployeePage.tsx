@@ -5,12 +5,21 @@ import './styles.css';
 import Subheader from '../../components/Subheader/Subheader';
 import StatusBar from '../../components/StatusBar/StatusBar';
 import { useNavigate } from 'react-router-dom';
+import ActionBar from '../../components/ActionBar/ActionBar';
 
 const EmployeePage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate('/create-employee');
+  };
+
+  const handleDelete = (id) => {
+    console.log(`Clicked to delete ${id}`);
+  };
+
+  const handleEdit = (id) => {
+    console.log(`Clicked to Edit ${id}`);
   };
 
   const arr = [
@@ -54,13 +63,28 @@ const EmployeePage: React.FC = () => {
   ];
 
   const getEachCell = (col, obj) => {
-    if (col !== 'Status') return <td className='td-container'>{obj[col]}</td>;
-    else
+    if (col === 'Status')
       return (
         <td className='td-container'>
           <StatusBar isActive={obj[col]} />
         </td>
       );
+    else if (col === 'Action')
+      return (
+        <div className='td-container'>
+          <ActionBar
+            onclickDelete={(e) => {
+              e.stopPropagation();
+              handleDelete(obj['EmployeeId']);
+            }}
+            onclickEdit={(e) => {
+              e.stopPropagation();
+              handleEdit(obj['EmployeeId']);
+            }}
+          />
+        </div>
+      );
+    else return <td className='td-container'>{obj[col]}</td>;
   };
 
   const getColumns = (obj: any) => {

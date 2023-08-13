@@ -1,0 +1,18 @@
+.actionbar-parent
+{
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+
+.action-icons
+{
+    width: 20px;
+    height: 20px;
+}
+
+.edit-icon
+{
+    background: #10AAC0 0% 0% no-repeat padding-box;
+    border-radius: 20%;
+}

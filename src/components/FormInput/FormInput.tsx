@@ -18,6 +18,7 @@ const FormInput: React.FC<FormInput_prop_types> = (props) => {
         value={props.value}
         onChange={props.onchangefunc}
         placeholder={props.placeholder}
+        className='forminput-bar'
       />
     </div>
   );
