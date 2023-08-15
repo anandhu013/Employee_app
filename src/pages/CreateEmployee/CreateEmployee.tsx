@@ -6,23 +6,72 @@ import Sidenav from '../../components/Sidenav/Sidenav';
 import FormInput from '../../components/FormInput/FormInput';
 import DropDown from '../../components/DropDown/DropDown';
 import Button from '../../components/Button/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 const CreateEmployee = () => {
-  const [empName, setEmpName] = useState();
-  const [jDate, setJDate] = useState();
-  const [experience, setExperience] = useState();
-  const [department, setDepartment] = useState();
-  const [role, setRole] = useState();
-  const [status, setStatus] = useState();
-  const [line1, setline1] = useState('');
-  const [line2, setline2] = useState('');
-  const [line3, setline3] = useState('');
+  const { id } = useParams();
 
   const dep_options = ['HR', 'Frontend', 'Backend'];
   const Roles = ['Admin', 'User'];
   const Status_list = ['Active', 'Inactive'];
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const obj = useSelector((state: any) => {
+    if (id) {
+      const obj = state.employees.find((ele) => ele.EmployeeId == id);
+
+      return obj;
+    }
+  });
+
+  const [empName, setEmpName] = useState(obj ? obj.EmployeeName : '');
+  const [jDate, setJDate] = useState(obj ? obj.JoiningDate : '');
+  const [experience, setExperience] = useState(obj ? obj.Experience : '');
+  const [department, setDepartment] = useState();
+  const [role, setRole] = useState(obj ? obj.Role : '');
+  const [status, setStatus] = useState(obj ? (obj.Status == true ? 'Active' : 'Inactive') : '');
+  const [line1, setline1] = useState('');
+  const [line2, setline2] = useState('');
+  const [line3, setline3] = useState('');
+
   const handleCreate = () => {
     console.log('Create clicked');
+    dispatch({
+      type: 'EMPLOYEE:CREATE',
+      payload: {
+        employee: {
+          EmployeeName: empName,
+          EmployeeId: 142,
+          JoiningDate: jDate,
+          Role: role,
+          Status: status === 'Inactive' ? false : true,
+          Experience: experience,
+          Action: 'Action'
+        }
+      }
+    });
+    navigate('/employee');
+  };
+
+  const handleEdit = () => {
+    console.log('Edit Clicked');
+    dispatch({
+      type: 'EMPLOYEE:EDIT',
+      payload: {
+        employee: {
+          EmployeeName: empName,
+          EmployeeId: Number(id),
+          JoiningDate: jDate,
+          Role: role,
+          Status: status === 'Inactive' ? false : true,
+          Experience: experience,
+          Action: 'Action'
+        }
+      }
+    });
+    navigate('/employee');
   };
 
   return (
@@ -118,7 +167,11 @@ const CreateEmployee = () => {
             </div>
           </div>
           <div className='buttons-parent'>
-            <Button value='Create' onclickfunc={handleCreate} type='submit' />
+            <Button
+              value={obj ? 'Edit' : 'Create'}
+              onclickfunc={obj ? handleEdit : handleCreate}
+              type='submit'
+            />
             <button className='cancel-button-style'>Cancel</button>
           </div>
         </div>

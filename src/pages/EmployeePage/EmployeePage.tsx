@@ -1,25 +1,51 @@
 import Sidenav from '../../components/Sidenav/Sidenav';
 import Header from '../../components/Header/Header';
-import React from 'react';
+import React, { useState } from 'react';
 import './styles.css';
 import Subheader from '../../components/Subheader/Subheader';
 import StatusBar from '../../components/StatusBar/StatusBar';
 import { useNavigate } from 'react-router-dom';
 import ActionBar from '../../components/ActionBar/ActionBar';
+import { useDispatch, useSelector } from 'react-redux';
+import DeletePopup from '../../components/DeletePopup/DeletePopup';
 
 const EmployeePage: React.FC = () => {
+  const [showDelete, setShowDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClick = () => {
     navigate('/create-employee');
   };
 
   const handleDelete = (id) => {
+    //setShowDelete(true);
     console.log(`Clicked to delete ${id}`);
+    dispatch({
+      type: 'EMPLOYEE:DELETE',
+      payload: {
+        employee: {
+          Eid: id
+        }
+      }
+    });
+    setShowDelete(false);
+  };
+
+  const handleTrash = (id) => {
+    setDeleteId(id);
+    setShowDelete(true);
+  };
+
+  const handleCancel = () => {
+    setDeleteId(null);
+    setShowDelete(false);
   };
 
   const handleEdit = (id) => {
     console.log(`Clicked to Edit ${id}`);
+    navigate(`/edit-employee/${id}`);
   };
 
   const arr = [
@@ -32,35 +58,11 @@ const EmployeePage: React.FC = () => {
     'Action'
   ];
 
-  const data: any[] = [
-    {
-      EmployeeName: 'Anandhu',
-      EmployeeId: 123,
-      JoiningDate: '12/12/2020',
-      Role: 'User',
-      Status: true,
-      Experience: 4,
-      Action: 'Action'
-    },
-    {
-      EmployeeName: 'Alen',
-      EmployeeId: 124,
-      JoiningDate: '11/12/2020',
-      Role: 'Admin',
-      Status: false,
-      Experience: 2,
-      Action: 'Action'
-    },
-    {
-      EmployeeName: 'Anil',
-      EmployeeId: 113,
-      JoiningDate: '01/11/2021',
-      Role: 'User',
-      Status: true,
-      Experience: 5,
-      Action: 'Action'
-    }
-  ];
+  const data = useSelector((state: any) => {
+    return state.employees;
+  });
+
+  console.log(data);
 
   const getEachCell = (col, obj) => {
     if (col === 'Status')
@@ -75,7 +77,7 @@ const EmployeePage: React.FC = () => {
           <ActionBar
             onclickDelete={(e) => {
               e.stopPropagation();
-              handleDelete(obj['EmployeeId']);
+              handleTrash(obj['EmployeeId']);
             }}
             onclickEdit={(e) => {
               e.stopPropagation();
@@ -111,6 +113,9 @@ const EmployeePage: React.FC = () => {
         onclickfunc={handleClick}
         img_path='assets/icons/plus.png'
       />
+      {showDelete && (
+        <DeletePopup value={deleteId} onclickDelete={handleDelete} onClickCancel={handleCancel} />
+      )}
       <div className='table-container'>
         <table className='thead-container'>
           <thead className='thead-container'>

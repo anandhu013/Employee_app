@@ -4,46 +4,23 @@ import './styles.css';
 import React from 'react';
 import Sidenav from '../../components/Sidenav/Sidenav';
 import Subheader from '../../components/Subheader/Subheader';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import DetailField from '../../components/DetailField/DetailField';
-
-const data: any[] = [
-  {
-    EmployeeName: 'Anandhu',
-    EmployeeId: 123,
-    JoiningDate: '12/12/2020',
-    Role: 'User',
-    Status: true,
-    Experience: 4,
-    Action: 'Action'
-  },
-  {
-    EmployeeName: 'Alen',
-    EmployeeId: 124,
-    JoiningDate: '11/12/2020',
-    Role: 'Admin',
-    Status: false,
-    Experience: 2,
-    Action: 'Action'
-  },
-  {
-    EmployeeName: 'Anil',
-    EmployeeId: 113,
-    JoiningDate: '01/11/2021',
-    Role: 'User',
-    Status: true,
-    Experience: 5,
-    Action: 'Action'
-  }
-];
+import { useSelector } from 'react-redux';
 
 const EmployeeDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  const data = useSelector((state: any) => {
+    return state.employees;
+  });
 
   const details = data.find((emp) => emp.EmployeeId == id);
 
   const handleClick = (e) => {
     console.log('Clicked', e.target.value);
+    navigate(`/edit-employee/${id}`);
   };
 
   return (
