@@ -8,6 +8,7 @@ import DropDown from '../../components/DropDown/DropDown';
 import Button from '../../components/Button/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { addEmployee, editEmployee } from '../../actions/employeeAction';
 const CreateEmployee = () => {
   const { id } = useParams();
 
@@ -34,43 +35,44 @@ const CreateEmployee = () => {
   const [status, setStatus] = useState(obj ? (obj.Status == true ? 'Active' : 'Inactive') : '');
   const [line1, setline1] = useState('');
   const [line2, setline2] = useState('');
-  const [line3, setline3] = useState('');
+  const [city, setcity] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [pincode, setPincode] = useState('');
 
   const handleCreate = () => {
     console.log('Create clicked');
-    dispatch({
-      type: 'EMPLOYEE:CREATE',
-      payload: {
+    dispatch(
+      addEmployee({
         employee: {
           EmployeeName: empName,
-          EmployeeId: 142,
+          EmployeeId: '142',
           JoiningDate: jDate,
           Role: role,
           Status: status === 'Inactive' ? false : true,
-          Experience: experience,
+          Experience: Number(experience),
           Action: 'Action'
         }
-      }
-    });
+      })
+    );
     navigate('/employee');
   };
 
   const handleEdit = () => {
     console.log('Edit Clicked');
-    dispatch({
-      type: 'EMPLOYEE:EDIT',
-      payload: {
+    dispatch(
+      editEmployee({
         employee: {
           EmployeeName: empName,
-          EmployeeId: Number(id),
+          EmployeeId: id,
           JoiningDate: jDate,
           Role: role,
           Status: status === 'Inactive' ? false : true,
-          Experience: experience,
+          Experience: Number(experience),
           Action: 'Action'
         }
-      }
-    });
+      })
+    );
     navigate('/employee');
   };
 
@@ -158,11 +160,38 @@ const CreateEmployee = () => {
             </div>
             <div className='address-child'>
               <FormInput
-                value={line3}
-                onchangefunc={(e) => setline3(e.target.value)}
+                value={city}
+                onchangefunc={(e) => setcity(e.target.value)}
                 type='text'
-                label='Address line3'
-                placeholder='Address line3'
+                label='City'
+                placeholder='City'
+              />
+            </div>
+            <div className='address-child'>
+              <FormInput
+                value={state}
+                onchangefunc={(e) => setState(e.target.value)}
+                type='text'
+                label='State'
+                placeholder='State'
+              />
+            </div>
+            <div className='address-child'>
+              <FormInput
+                value={country}
+                onchangefunc={(e) => setCountry(e.target.value)}
+                type='text'
+                label='Country'
+                placeholder='Country'
+              />
+            </div>
+            <div className='address-child'>
+              <FormInput
+                value={pincode}
+                onchangefunc={(e) => setPincode(e.target.value)}
+                type='text'
+                label='Pincode'
+                placeholder='Pincode'
               />
             </div>
           </div>

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.css';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
+import { useLoginMutation } from './api';
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -11,10 +12,13 @@ const LoginPage: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const navigate = useNavigate();
 
+  const [login, { data, isSuccess }] = useLoginMutation();
+
   const handleclick = (e) => {
     console.log(e.target.value);
-    if (username.length > 0 && password.length > 0) navigate('/employee');
-    else setShowError(true);
+    if (username.length == 0 || password.length == 0) setShowError(true);
+
+    login({ username: username, password: password });
   };
 
   const handleUsername = (e) => {
@@ -24,6 +28,13 @@ const LoginPage: React.FC = () => {
   const handlePassword = (e) => {
     setPassword(e.target.value);
   };
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      localStorage.setItem('Auth', data.data['token']);
+      navigate('/employee');
+    }
+  }, [data, isSuccess]);
 
   return (
     <section className='login_container'>

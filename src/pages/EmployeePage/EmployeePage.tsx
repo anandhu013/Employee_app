@@ -8,12 +8,17 @@ import { useNavigate } from 'react-router-dom';
 import ActionBar from '../../components/ActionBar/ActionBar';
 import { useDispatch, useSelector } from 'react-redux';
 import DeletePopup from '../../components/DeletePopup/DeletePopup';
+import { deleteEmployee } from '../../actions/employeeAction';
+import { useGetEmployeeListQuery } from './api';
 
 const EmployeePage: React.FC = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [deleteId, setDeleteId] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { data: EmployeeList } = useGetEmployeeListQuery();
+
+  console.log(EmployeeList['data']);
 
   const handleClick = () => {
     navigate('/create-employee');
@@ -22,14 +27,13 @@ const EmployeePage: React.FC = () => {
   const handleDelete = (id) => {
     //setShowDelete(true);
     console.log(`Clicked to delete ${id}`);
-    dispatch({
-      type: 'EMPLOYEE:DELETE',
-      payload: {
+    dispatch(
+      deleteEmployee({
         employee: {
-          Eid: id
+          id: id
         }
-      }
-    });
+      })
+    );
     setShowDelete(false);
   };
 
@@ -58,11 +62,13 @@ const EmployeePage: React.FC = () => {
     'Action'
   ];
 
+  //const arr1 = ['name', 'id', 'joiningDate', 'role', 'isActive', 'experience'];
+
   const data = useSelector((state: any) => {
     return state.employees;
   });
 
-  console.log(data);
+  //console.log(data);
 
   const getEachCell = (col, obj) => {
     if (col === 'Status')
