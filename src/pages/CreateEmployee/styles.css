@@ -62,13 +62,14 @@ opacity: 1;
 .address-parent
 {
     display: flex;
-    flex-direction: column;
-    width: 30%;
+    flex-wrap: wrap;
+    padding-top: 50px;
 }
 
 .address-child
 {
     padding-top: 20px;
+    width:30%;
 }
 
 .buttons-parent

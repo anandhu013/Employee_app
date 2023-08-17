@@ -1,22 +1,30 @@
 import baseApi from '../../service';
 
 interface Employee {
-  EmployeeName: string;
+  name: string;
   joiningDate: string;
-  Role: string;
-  status: boolean;
-  Experience: number;
-  EmployeeId: string;
+  role: string;
+  isActive: boolean;
+  experience: number;
+  id: string;
 }
 
 export const employeeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getEmployeeList: builder.query<Employee[], void>({
-      query: () => '/employees'
+    getEmployeeList: builder.query<{ data: Employee[] }, void>({
+      query: () => '/employees',
+      providesTags: ['xyz']
+    }),
+    deleteEmployee: builder.mutation<{}, string>({
+      query: (id) => ({
+        url: `/employees/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['xyz']
     })
   })
 });
 
-export const { useGetEmployeeListQuery } = employeeApi;
+export const { useGetEmployeeListQuery, useDeleteEmployeeMutation } = employeeApi;
 
 export default employeeApi;

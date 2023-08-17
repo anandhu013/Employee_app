@@ -1,15 +1,16 @@
 import Sidenav from '../../components/Sidenav/Sidenav';
 import Header from '../../components/Header/Header';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.css';
 import Subheader from '../../components/Subheader/Subheader';
 import StatusBar from '../../components/StatusBar/StatusBar';
 import { useNavigate } from 'react-router-dom';
 import ActionBar from '../../components/ActionBar/ActionBar';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import DeletePopup from '../../components/DeletePopup/DeletePopup';
 import { deleteEmployee } from '../../actions/employeeAction';
-import { useGetEmployeeListQuery } from './api';
+import { useDeleteEmployeeMutation, useGetEmployeeListQuery } from './api';
+import Button from '../../components/Button/Button';
 
 const EmployeePage: React.FC = () => {
   const [showDelete, setShowDelete] = useState(false);
@@ -17,8 +18,10 @@ const EmployeePage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data: EmployeeList } = useGetEmployeeListQuery();
+  const [deleteEmployeeTrigger, { data: deleteData, isSuccess: deleteSuccess }] =
+    useDeleteEmployeeMutation();
 
-  console.log(EmployeeList['data']);
+  //console.log(EmployeeList['data']);
 
   const handleClick = () => {
     navigate('/create-employee');
@@ -34,7 +37,7 @@ const EmployeePage: React.FC = () => {
         }
       })
     );
-    setShowDelete(false);
+    deleteEmployeeTrigger(id);
   };
 
   const handleTrash = (id) => {
@@ -52,6 +55,12 @@ const EmployeePage: React.FC = () => {
     navigate(`/edit-employee/${id}`);
   };
 
+  const handleLogout = () => {
+    console.log('Clicked to logout');
+    localStorage.removeItem('Auth');
+    navigate('/login');
+  };
+
   const arr = [
     'Employee Name',
     'Employee Id',
@@ -62,16 +71,12 @@ const EmployeePage: React.FC = () => {
     'Action'
   ];
 
-  //const arr1 = ['name', 'id', 'joiningDate', 'role', 'isActive', 'experience'];
+  const arr1 = ['name', 'id', 'joiningDate', 'role', 'isActive', 'experience', 'Action'];
 
-  const data = useSelector((state: any) => {
-    return state.employees;
-  });
-
-  //console.log(data);
+  const data = EmployeeList?.data;
 
   const getEachCell = (col, obj) => {
-    if (col === 'Status')
+    if (col === 'isActive')
       return (
         <td className='td-container'>
           <StatusBar isActive={obj[col]} />
@@ -83,11 +88,11 @@ const EmployeePage: React.FC = () => {
           <ActionBar
             onclickDelete={(e) => {
               e.stopPropagation();
-              handleTrash(obj['EmployeeId']);
+              handleTrash(obj.id);
             }}
             onclickEdit={(e) => {
               e.stopPropagation();
-              handleEdit(obj['EmployeeId']);
+              handleEdit(obj.id);
             }}
           />
         </div>
@@ -99,15 +104,19 @@ const EmployeePage: React.FC = () => {
     return (
       <tr
         className='trbody-container'
-        key={obj.EmployeeId}
+        key={obj.id}
         onClick={() => {
-          navigate(`/employee/${obj['EmployeeId']}`);
+          navigate(`/employee/${obj['id']}`);
         }}
       >
-        {Object.keys(obj).map((col) => getEachCell(col, obj))}
+        {arr1.map((col) => getEachCell(col, obj))}
       </tr>
     );
   };
+
+  useEffect(() => {
+    setShowDelete(false);
+  }, [deleteData, deleteSuccess]);
 
   return (
     <div className='container'>
@@ -133,8 +142,11 @@ const EmployeePage: React.FC = () => {
               ))}
             </tr>
           </thead>
-          <tbody>{data.map((ele) => getColumns(ele))}</tbody>
+          <tbody>{data?.map((ele) => getColumns(ele))}</tbody>
         </table>
+      </div>
+      <div className='logout-btn-container'>
+        <Button type='button' value='Logout' onclickfunc={handleLogout} />
       </div>
     </div>
   );

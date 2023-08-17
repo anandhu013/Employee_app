@@ -60,3 +60,10 @@ opacity: 1;
 {
     background-color:#D3D3D3;
 }
+
+.logout-btn-container
+{
+    position: fixed;
+    bottom: 40px;
+    right:45%;
+}

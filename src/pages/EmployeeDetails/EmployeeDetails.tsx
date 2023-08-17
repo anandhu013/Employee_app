@@ -6,17 +6,22 @@ import Sidenav from '../../components/Sidenav/Sidenav';
 import Subheader from '../../components/Subheader/Subheader';
 import { useNavigate, useParams } from 'react-router-dom';
 import DetailField from '../../components/DetailField/DetailField';
-import { useSelector } from 'react-redux';
+import { useGetEmployeeByIdQuery } from './api';
 
 const EmployeeDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { data: emp } = useGetEmployeeByIdQuery(id);
 
-  const data = useSelector((state: any) => {
-    return state.employees;
-  });
-
-  const details = data.find((emp) => emp.EmployeeId == id);
+  const details = emp?.data;
+  const arr1 = [
+    ['name', 'Name'],
+    ['id', 'ID'],
+    ['joiningDate', 'Joining Date'],
+    ['role', 'Role'],
+    ['isActive', 'Status'],
+    ['experience', 'Experience']
+  ];
 
   const handleClick = (e) => {
     console.log('Clicked', e.target.value);
@@ -35,9 +40,10 @@ const EmployeeDetails = () => {
       />
 
       <div className='details-container'>
-        {Object.keys(details).map((col) => (
-          <DetailField type={col} keyField={col} value={details[col]} key={details.EmployeeId} />
-        ))}
+        {details &&
+          arr1.map((col) => (
+            <DetailField type={col[0]} keyField={col[1]} value={details[col[0]]} key={details.id} />
+          ))}
       </div>
     </div>
   );

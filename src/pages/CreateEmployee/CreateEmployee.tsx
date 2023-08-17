@@ -1,44 +1,65 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Header from '../../components/Header/Header';
 import './styles.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidenav from '../../components/Sidenav/Sidenav';
 import FormInput from '../../components/FormInput/FormInput';
 import DropDown from '../../components/DropDown/DropDown';
 import Button from '../../components/Button/Button';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { addEmployee, editEmployee } from '../../actions/employeeAction';
+import { useLazyGetEmployeeByIdQuery } from '../EmployeeDetails/api';
+import {
+  useCreateEmployeeMutation,
+  useEditEmployeeMutation,
+  useGetDepartmentListQuery,
+  useGetRolesListQuery,
+  useLazyGetDepartmentByIdQuery
+} from './api';
 const CreateEmployee = () => {
   const { id } = useParams();
 
-  const dep_options = ['HR', 'Frontend', 'Backend'];
-  const Roles = ['Admin', 'User'];
+  const { data: dep_response } = useGetDepartmentListQuery();
+  const { data: role_response } = useGetRolesListQuery();
+
+  const dep_options = dep_response?.data.map((dep) => dep.name);
+  const Roles = role_response?.data;
   const Status_list = ['Active', 'Inactive'];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const obj = useSelector((state: any) => {
+  /*const obj = useSelector((state: any) => {
     if (id) {
       const obj = state.employees.find((ele) => ele.EmployeeId == id);
 
       return obj;
     }
-  });
+  });*/
+  const [getEmployeeById, { data, isSuccess }] = useLazyGetEmployeeByIdQuery();
+  const [getDepartmentById, { data: depData, isSuccess: isSucDep }] =
+    useLazyGetDepartmentByIdQuery();
 
-  const [empName, setEmpName] = useState(obj ? obj.EmployeeName : '');
-  const [jDate, setJDate] = useState(obj ? obj.JoiningDate : '');
-  const [experience, setExperience] = useState(obj ? obj.Experience : '');
-  const [department, setDepartment] = useState();
-  const [role, setRole] = useState(obj ? obj.Role : '');
-  const [status, setStatus] = useState(obj ? (obj.Status == true ? 'Active' : 'Inactive') : '');
+  const [CreateEmployee, { data: createData, isSuccess: isSuccessCreate }] =
+    useCreateEmployeeMutation();
+
+  const [EditEmployee, { data: EditData, isSuccess: isSuccessEdit }] = useEditEmployeeMutation();
+
+  const [empName, setEmpName] = useState('');
+  const [jDate, setJDate] = useState('');
+  const [experience, setExperience] = useState(null);
+  const [department, setDepartment] = useState('');
+  const [role, setRole] = useState('');
+  const [status, setStatus] = useState('');
   const [line1, setline1] = useState('');
   const [line2, setline2] = useState('');
   const [city, setcity] = useState('');
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
   const [pincode, setPincode] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleCreate = () => {
     console.log('Create clicked');
@@ -55,7 +76,23 @@ const CreateEmployee = () => {
         }
       })
     );
-    navigate('/employee');
+    CreateEmployee({
+      name: empName,
+      username: username,
+      password: password,
+      experience: Number(experience),
+      departmentId: dep_response?.data.find((obj) => obj.name === department)?.id,
+      joiningDate: jDate,
+      address: {
+        addressLine1: line1,
+        addressLine2: line2,
+        city: city,
+        state: state,
+        country: country,
+        pincode: pincode
+      },
+      role: role
+    });
   };
 
   const handleEdit = () => {
@@ -73,8 +110,61 @@ const CreateEmployee = () => {
         }
       })
     );
-    navigate('/employee');
+    EditEmployee({
+      id: id,
+      body: {
+        name: empName,
+        username: username,
+        experience: Number(experience),
+        departmentId: dep_response?.data.find((obj) => obj.name === department)?.id,
+        joiningDate: jDate,
+        address: {
+          addressLine1: line1,
+          addressLine2: line2,
+          city: city,
+          state: state,
+          country: country,
+          pincode: pincode
+        },
+        role: role,
+        isActive: status === 'Inactive' ? false : true
+      }
+    });
   };
+
+  useEffect(() => {
+    if (id) getEmployeeById(id);
+  }, []);
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      setEmpName(data.data.name);
+      setJDate(data.data.joiningDate);
+      setExperience(data.data.experience);
+      setUsername(data.data.username);
+      setRole(data.data.role);
+      setStatus(data.data.isActive ? 'Active' : 'Inactive');
+      setCountry(data.data.address.country);
+      setState(data.data.address.state);
+      setPincode(data.data.address.pincode);
+      setline1(data.data.address.addressLine1);
+      setline2(data.data.address.addressLine2);
+      setcity(data.data.address.city);
+      getDepartmentById(data.data.departmentId);
+    }
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (depData && isSucDep) setDepartment(depData.data.name);
+  }, [depData, isSucDep]);
+
+  useEffect(() => {
+    if (createData && isSuccessCreate) navigate('/employee');
+  }, [createData, isSuccessCreate]);
+
+  useEffect(() => {
+    if (EditData && isSuccessEdit) navigate('/employee');
+  }, [EditData, isSuccessEdit]);
 
   return (
     <div className='container'>
@@ -98,6 +188,26 @@ const CreateEmployee = () => {
             </div>
             <div className='form-child'>
               <FormInput
+                value={username}
+                onchangefunc={(e) => setUsername(e.target.value)}
+                type='text'
+                label='Username'
+                placeholder='username'
+              />
+            </div>
+            {!id && (
+              <div className='form-child'>
+                <FormInput
+                  value={password}
+                  onchangefunc={(e) => setPassword(e.target.value)}
+                  type='password'
+                  label='Password'
+                  placeholder='password'
+                />
+              </div>
+            )}
+            <div className='form-child'>
+              <FormInput
                 value={jDate}
                 onchangefunc={(e) => setJDate(e.target.value)}
                 type='text'
@@ -117,7 +227,7 @@ const CreateEmployee = () => {
             <div className='form-child'>
               <DropDown
                 value={department}
-                options={dep_options}
+                options={dep_options ? dep_options : []}
                 label='Department'
                 onchangefunc={(e) => setDepartment(e.target.value)}
               />
@@ -125,7 +235,7 @@ const CreateEmployee = () => {
             <div className='form-child'>
               <DropDown
                 value={role}
-                options={Roles}
+                options={Roles ? Roles : []}
                 label='Role'
                 onchangefunc={(e) => setRole(e.target.value)}
               />
@@ -197,8 +307,8 @@ const CreateEmployee = () => {
           </div>
           <div className='buttons-parent'>
             <Button
-              value={obj ? 'Edit' : 'Create'}
-              onclickfunc={obj ? handleEdit : handleCreate}
+              value={id ? 'Edit' : 'Create'}
+              onclickfunc={id ? handleEdit : handleCreate}
               type='submit'
             />
             <button className='cancel-button-style'>Cancel</button>
