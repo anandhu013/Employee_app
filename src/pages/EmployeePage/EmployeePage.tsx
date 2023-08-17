@@ -61,43 +61,38 @@ const EmployeePage: React.FC = () => {
     navigate('/login');
   };
 
-  const arr = [
-    'Employee Name',
-    'Employee Id',
-    'Joining Date',
-    'Role',
-    'Status',
-    'Experience',
-    'Action'
-  ];
+  const arr = ['Employee Name', 'Employee Id', 'Joining Date', 'Role', 'Status', 'Experience'];
 
   const arr1 = ['name', 'id', 'joiningDate', 'role', 'isActive', 'experience', 'Action'];
 
   const data = EmployeeList?.data;
 
   const getEachCell = (col, obj) => {
-    if (col === 'isActive')
+    if (col === 'isActive') {
       return (
         <td className='td-container'>
           <StatusBar isActive={obj[col]} />
         </td>
       );
-    else if (col === 'Action')
-      return (
-        <div className='td-container'>
-          <ActionBar
-            onclickDelete={(e) => {
-              e.stopPropagation();
-              handleTrash(obj.id);
-            }}
-            onclickEdit={(e) => {
-              e.stopPropagation();
-              handleEdit(obj.id);
-            }}
-          />
-        </div>
-      );
-    else return <td className='td-container'>{obj[col]}</td>;
+    } else if (col === 'Action') {
+      if (localStorage.getItem('Role') === 'admin')
+        return (
+          <div className='td-container'>
+            <ActionBar
+              onclickDelete={(e) => {
+                e.stopPropagation();
+                handleTrash(obj.id);
+              }}
+              onclickEdit={(e) => {
+                e.stopPropagation();
+                handleEdit(obj.id);
+              }}
+            />
+          </div>
+        );
+    } else {
+      return <td className='td-container'>{obj[col]}</td>;
+    }
   };
 
   const getColumns = (obj: any) => {
@@ -140,6 +135,11 @@ const EmployeePage: React.FC = () => {
                   {ele}
                 </td>
               ))}
+              {localStorage.getItem('Role') === 'admin' && (
+                <td key='action' className='td-container'>
+                  Action
+                </td>
+              )}
             </tr>
           </thead>
           <tbody>{data?.map((ele) => getColumns(ele))}</tbody>

@@ -13,7 +13,9 @@ const Subheader: React.FC<subheader_prop_types> = (props) => {
   return (
     <div className='sub-container'>
       <h2 className='title'>{props.title}</h2>
-      <SubButton value={props.name} img_path={props.img_path} onclickfunc={props.onclickfunc} />
+      {localStorage.getItem('Role') === 'admin' && (
+        <SubButton value={props.name} img_path={props.img_path} onclickfunc={props.onclickfunc} />
+      )}
     </div>
   );
 };

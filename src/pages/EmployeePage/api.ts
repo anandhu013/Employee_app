@@ -2,6 +2,7 @@ import baseApi from '../../service';
 
 interface Employee {
   name: string;
+  username: string;
   joiningDate: string;
   role: string;
   isActive: boolean;
@@ -25,6 +26,7 @@ export const employeeApi = baseApi.injectEndpoints({
   })
 });
 
-export const { useGetEmployeeListQuery, useDeleteEmployeeMutation } = employeeApi;
+export const { useGetEmployeeListQuery, useDeleteEmployeeMutation, useLazyGetEmployeeListQuery } =
+  employeeApi;
 
 export default employeeApi;

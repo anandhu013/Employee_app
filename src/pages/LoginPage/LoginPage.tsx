@@ -4,6 +4,7 @@ import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from './api';
+import { useLazyGetEmployeeListQuery } from '../EmployeePage/api';
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -13,6 +14,8 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [login, { data, isSuccess }] = useLoginMutation();
+  const [getEmployeeList, { data: employeeList, isSuccess: empSuccess }] =
+    useLazyGetEmployeeListQuery();
 
   const handleclick = (e) => {
     console.log(e.target.value);
@@ -32,9 +35,16 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     if (data && isSuccess) {
       localStorage.setItem('Auth', data.data['token']);
-      navigate('/employee');
+      getEmployeeList();
     }
   }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (employeeList && empSuccess) {
+      localStorage.setItem('Role', employeeList.data.find((obj) => obj.username === username).role);
+      navigate('/employee');
+    }
+  }, [employeeList, empSuccess]);
 
   return (
     <section className='login_container'>
