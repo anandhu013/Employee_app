@@ -1,9 +1,9 @@
 import React from 'react';
 import './styles.css';
 
-type Input_prop_types = {
+export type Input_prop_types = {
   value: string;
-  onchangefunc: (e: any) => void;
+  onchangefunc?: (e: any) => void;
   type: string;
   label: string;
 };
@@ -11,7 +11,12 @@ type Input_prop_types = {
 const Input: React.FC<Input_prop_types> = (props) => {
   return (
     <div className='relative'>
-      <input type={props.type} value={props.value} onChange={props.onchangefunc} />
+      <input
+        type={props.type}
+        value={props.value}
+        onChange={props.onchangefunc}
+        data-testid='input-test'
+      />
       <label>{props.label}</label>
     </div>
   );

@@ -4,8 +4,8 @@ import Button from '../Button/Button';
 
 export type DeletePopup_prop_types = {
   value: number;
-  onclickDelete: (e: any) => void;
-  onClickCancel: (e: any) => void;
+  onclickDelete?: (e: any) => void;
+  onClickCancel?: (e: any) => void;
 };
 
 const DeletePopup: React.FC<DeletePopup_prop_types> = (props) => {
@@ -17,7 +17,10 @@ const DeletePopup: React.FC<DeletePopup_prop_types> = (props) => {
         </div>
         <div className='deletepopup-text'>
           <p className='deletepopup-text-main'>Are you sure?</p>
-          <p className='deletepopup-text-sub'>{`You want to delete employee ${props.value}`}</p>
+          <p
+            className='deletepopup-text-sub'
+            data-testid='popup-para'
+          >{`You want to delete employee ${props.value}`}</p>
         </div>
         <div>
           <Button
